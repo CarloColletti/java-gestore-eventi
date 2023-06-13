@@ -13,7 +13,7 @@ public class Event {
     private int bookedSeats;
 
 
-    //COSTRUTTORE -----------------------------------------------------------------------------------------
+    //COSTRUTTORE
     public Event(String titleEvent, LocalDate date, int CAPACITY) throws RuntimeException {
         //titolo
         if(isTitleEventValid(titleEvent)) {
@@ -39,7 +39,7 @@ public class Event {
     }
 
 
-    //GETTER -----------------------------------------------------------------------------------------
+    //GETTER
     public String getTitleEvent() {
         return titleEvent;
     }
@@ -60,7 +60,7 @@ public class Event {
     }
 
 
-    //SETTER -----------------------------------------------------------------------------------------
+    //SETTER
     public void setTitleEvent(String titleEvent) throws RuntimeException {
         if(isTitleEventValid(titleEvent)) {
             this.titleEvent = titleEvent;
@@ -78,52 +78,52 @@ public class Event {
     }
 
 
-    //METODI -----------------------------------------------------------------------------------------
+    //METODI
 
-    //pubblici ---------
+    //pubblici
     public void bookSeat() throws RuntimeException {
-        // ------------- VERIFICO LA DATA -------------
+        //VERIFICO LA DATA
         //se la data di oggi è successiva alla data dell'evento non è possibile prenotare
         if(isEventPast()) {
             throw new RuntimeException("L'evento è trascorso. Non è possibile prenotare");
         }
 
-        // ---------- VERIFICO IL NUMERO DI POSTI DISPONIBILI ----------
+        //VERIFICO IL NUMERO DI POSTI DISPONIBILI
         //se i posti disponibili sono pari o minori di 0 non è possibile prenotare
         if(getAvailableSeats() <= 0) {
             throw new RuntimeException("Non ci sono posti disponibili. Non è possibile prenotare");
         }
 
-        // ---------- SE CI SONO TUTTI I PRESUPPOSTI ----------
+        //SE CI SONO TUTTI I PRESUPPOSTI
         //aumento di 1 i posti prenotati
         this.bookedSeats ++;
     }
     public void cancelSeat() {
-        // ------------- VERIFICO LA DATA -------------
+        //VERIFICO LA DATA
         //se la data di oggi è successiva alla data dell'evento non è possibile disdire
         if(isEventPast()) {
             throw new RuntimeException("L'evento è trascorso. Non è possibile disdire");
         }
 
-        // ---------- VERIFICO IL NUMERO DI POSTI PRENOTATI ----------
+        // VERIFICO IL NUMERO DI POSTI PRENOTATI
         //se i posti prenotati sono pari o minori di 0 non è possibile disdire
         if(this.bookedSeats <= 0) {
             throw new RuntimeException("Non ci sono posti prenotati. Non è possibile disdire");
         }
 
-        // ---------- SE CI SONO TUTTI I PRESUPPOSTI ----------
+        //SE CI SONO TUTTI I PRESUPPOSTI
         //diminuisco di 1 i posti prenotati
         this.bookedSeats --;
     }
 
-    //override ---------
+    //override
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return "Titolo: " + titleEvent + ", Data: " + date.format(formatter);
     }
 
-    //validatori ---------
+    //validatori
     private boolean isEventPast() {
         //prendo la data di oggi
         LocalDate today = LocalDate.now();
