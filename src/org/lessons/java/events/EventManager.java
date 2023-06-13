@@ -11,10 +11,17 @@ public class EventManager {
     //attribute
     Event event;
 
+    Scanner scan;
+    //getter
+
+    public Event getEvent() {
+        return event;
+    }
+
     //method
     public void createNewEvent() {
-        Scanner scan = new Scanner(System.in);
-        //nome dell'evento
+        //testo accoglienza
+        System.out.println("Benvenuto, nel programma per la creaione e gestione degli eventi");
         String titleEvent;
         do {
             System.out.println("inserisci il nome dell'evento. ");
@@ -50,7 +57,7 @@ public class EventManager {
                 System.out.print("Mese: ");
                 try {
                     month = Integer.parseInt(scan.nextLine());
-                    //se il giorno non è compreso fra 1 e 31
+                    //se non inserisce un mese tra il 1-12 richiede
                     if(month < 1 || month > 12 ) {
                         System.out.println("Il mese deve essere un numero positivo compreso fra 1 e 12");
                     }
@@ -64,7 +71,7 @@ public class EventManager {
                 System.out.print("Anno: ");
                 try {
                     year = Integer.parseInt(scan.nextLine());
-                    //se l'anno è negativo
+                    //se l'anno è negativo o scritto errato richiedo
                     if(year < 0) {
                         System.out.println("L'anno deve essere un numero positivo");
                     }
@@ -87,7 +94,7 @@ public class EventManager {
             }
             //ripeto finché non ho una data valida
         } while (!isValid);
-        //tengo conto del numero massimo dei posti
+        //richiesta numeri posti
         int seatCapacity = 0;
         do {
             System.out.println("Quanti posti disponibili ci sono?");
@@ -110,8 +117,103 @@ public class EventManager {
         }
         //stampo l'evento
         System.out.println(event);
-
-        scan.close();
     }
 
+    public void openScanner() {
+        scan = new Scanner(System.in);
+    }
+    public void closeScanner() {
+        if(scan != null) {
+            scan.close();
+        }
+    }
+
+
+    //parte delle prenotazioni
+    public void bookingMenu() {
+        System.out.println("Benvenuto nella sezione delle prenotazioni");
+        String choice;
+        do {
+            System.out.println("Vuoi effettuare una prenotazione? y/n");
+            choice = scan.nextLine();
+            if(!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n")) {
+                System.out.println("L'input " + choice + " non è valido. Inserire 'y' o 'n'.");
+            }
+        } while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n"));
+        boolean letsBooking = choice.equalsIgnoreCase("y");
+        //se l'utente vuole procedere
+        if(letsBooking) {
+            //chiedo il numnero delle prenotazioni
+            int bookingNum = 0;
+            do {
+                System.out.println("Inserisca il numero di posti da prenotare");
+                try {
+                    bookingNum = Integer.parseInt(scan.nextLine());
+                    if(bookingNum <= 0) {
+                        System.out.println("Il numero deve essere maggiore di 0");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Inserisci un numero");
+                }
+            } while(bookingNum <= 0);
+
+            //effetuo la prenotazione n volte rispetto a quello digitato dell'utente
+            try {
+                for (int i = 0; i < bookingNum; i++) {
+                    event.bookSeat();
+                }
+                System.out.println("La prenotazione per: " + bookingNum +" è avvenuta con successo");
+                System.out.println("Posti prenotati: " + event.getBookedSeats());
+                System.out.println("Posti disponibili: " + event.getAvailableSeats());
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+
+    }
+
+
+    // parte per la cancellazione
+    public void cancelMenu() {
+        System.out.println("Benvenuto nella sezione delle cancellazioni");
+        String choice;
+        do {
+            System.out.println("Vuoi effettuare una disdetta? y/n");
+            choice = scan.nextLine();
+            if(!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n")) {
+                System.out.println("L'input " + choice + " non è valido. Inserire 'y' o 'n'.");
+            }
+        } while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n"));
+
+        boolean letsCancel = choice.equalsIgnoreCase("y");
+
+        //se l'utente vuole procedere
+        if(letsCancel) {
+            //raccolgo il numero delle disdette
+            int cancelNum = 0;
+            do {
+                System.out.println("Quanti posti vuoi disdire?");
+                try {
+                    cancelNum = Integer.parseInt(scan.nextLine());
+                    if(cancelNum <= 0) {
+                        System.out.println("Il numero deve essere maggiore di 0");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Inserisci un numero");
+                }
+            } while(cancelNum <= 0);
+            try {
+                for (int i = 0; i < cancelNum; i++) {
+                    event.cancelSeat();
+                }
+                //se va tutto bene (cancelSeat non ha tirato eccezioni)
+                System.out.println(cancelNum +" posti sono stati disdetti con successo");
+                System.out.println("Posti prenotati rimasti dopo la disdetta: " + event.getBookedSeats());
+                System.out.println("Posti rimanenti " + event.getAvailableSeats());
+            } catch (RuntimeException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
 }

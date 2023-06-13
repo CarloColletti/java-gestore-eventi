@@ -2,11 +2,17 @@ package org.lessons.java.events;
 
 public class Main {
     public static void main(String[] args) {
-
-        //creo un nuovo EventManager
-        EventManager em = new EventManager();
-        //creo un nuovo evento
-        em.createNewEvent();
+        EventManager NewEvent  = new EventManager();
+        //scanner
+        NewEvent.openScanner();
+        //nuovo evento
+        NewEvent.createNewEvent();
+        //parte prenotazioni
+        NewEvent.bookingMenu();
+        //parte disdette
+        NewEvent.cancelMenu();
+        //chiudo scanner
+        NewEvent.closeScanner();
 
 
     }
